@@ -193,3 +193,153 @@ func isPalindrome(s string) bool {
 
 	return true
 }
+
+// Subsets 78. 子集
+func Subsets(nums []int) [][]int {
+	var res [][]int
+	if len(nums) == 0 {
+		return res
+	}
+	var path []int
+	var back func(index int)
+	back = func(index int) {
+
+		res = append(res, append([]int{}, path...))
+		for i := index; i < len(nums); i++ {
+			path = append(path, nums[i])
+			back(i+1)
+			path = path[:len(path)-1]
+		}
+	}
+
+	back(0)
+	return res
+}
+
+// SubsetsWithDup 90.子集II
+func SubsetsWithDup(nums []int) [][]int {
+	var res [][]int
+	if len(nums) == 0 {
+		return res
+	}
+
+	var path []int
+	var back func(index int)
+	sort.Ints(nums)
+	back = func(index int) {
+		res = append(res, append([]int{}, path...))
+		for i := index; i < len(nums); i++ {
+			if i != index && nums[i] == nums[i-1] {
+				continue
+			}
+			path = append(path, nums[i])
+			back(i+1)
+			path = path[:len(path)-1]
+		}
+	}
+
+	back(0)
+	return res
+}
+
+// FindSubsequences 491. 递增子序列
+func FindSubsequences(nums []int) [][]int {
+	var res [][]int
+	if len(nums) == 0 {
+		return res
+	}
+
+	var path []int
+	var back func(index int)
+	//sort.Ints(nums)
+	back = func(index int) {
+
+		if len(path) >= 2 {
+			res = append(res, append([]int{}, path...))
+		}
+		used := make(map[int]bool, len(nums))   // 初始化used字典，用以对同层元素去重
+		for i := index; i < len(nums); i++ {
+			fmt.Println(path, used, nums[i])
+			if used[nums[i]] {   // 去重
+				continue
+			}
+			if len(path) == 0 || nums[i] >= path[len(path)-1] {
+				path = append(path, nums[i])
+				used[nums[i]] = true
+				back(i+1)
+				path = path[:len(path)-1]
+			}
+		}
+	}
+
+	back(0)
+	return res
+}
+
+// Permute 46. 全排列
+func Permute(nums []int) [][]int {
+	var res [][]int
+	if len(nums) == 0 {
+		return res
+	}
+
+	var path []int
+	var back func(index int)
+	used := make(map[int]bool)
+	back = func(index int) {
+		if len(path) == len(nums) {
+			res = append(res, append([]int{}, path...))
+			return
+		}
+
+		for i := 0; i < len(nums); i++ {
+			if used[nums[i]] {
+				continue
+			}
+			path = append(path, nums[i])
+			used[nums[i]] = true
+			back(i+1)
+			path = path[:len(path)-1]
+			used[nums[i]] = false
+		}
+	}
+
+	back(0)
+
+	return res
+}
+
+// PermuteUnique 47. 全排列 II
+func PermuteUnique(nums []int) [][]int {
+	var res [][]int
+
+	if len(nums) == 0 {
+		return res
+	}
+
+	var path []int
+	var back func()
+	used := make(map[int]bool)
+	sort.Ints(nums)
+	back = func() {
+		if len(path) == len(nums) {
+			res = append(res, append([]int{}, path...))
+			return
+		}
+
+		for i := 0; i < len(nums); i++ {
+			if used[i] || i != 0 && nums[i]==nums[i-1] && !used[i-1] {
+				continue
+			}
+			path = append(path, nums[i])
+			used[i] = true
+			back()
+			used[i] = false
+			path = path[:len(path)-1]
+		}
+	}
+
+	back()
+
+	return res
+}

@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
-	backtracking "suanfa/algorithm/Backtracking"
+	"suanfa/algorithm/dynamicProgramming"
 	// binarytree "suanfa/algorithm/BinaryTree"
 )
 
 func main() {
-	fmt.Println(backtracking.Partition("aab"))
+	//weight := []int{1,3,4}
+	//value := []int{15,20,30}
+	fmt.Println(dynamicProgramming.NumSquares( 12))
 }
